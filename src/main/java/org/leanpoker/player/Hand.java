@@ -31,7 +31,8 @@ public class Hand {
 
     public boolean isHighCard(final Card card) {
         return "10".equals(card.getRank()) || "J".equals(card.getRank()) ||
-                "Q".equals(card.getRank()) || "K".equals(card.getRank()) || "A".equals(card.getRank());
+                "Q".equals(card.getRank()) || "K".equals(card.getRank()) ||
+                "A".equals(card.getRank());
     }
 
     public boolean isHighHandPair() {
