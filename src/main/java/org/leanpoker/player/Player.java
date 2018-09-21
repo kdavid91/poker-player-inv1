@@ -14,13 +14,24 @@ public class Player {
                 .filter(player -> player.getName().equals("InV1"))
                 .findFirst()
                 .get();
-        
+
+        Card leftCard = ourPlayer.getHoleCards().get(0);
+        Card rightCard = ourPlayer.getHoleCards().get(1);
+
+        log("our cards: left: " + leftCard + ", right: " + rightCard);
+
+
+
         return 100;
 
     }
 
     public static void showdown(final JsonElement game) {
-        System.out.println(game);
+        // System.out.println(game);
+    }
+
+    private static void log(String message) {
+        System.out.println(message);
     }
 
 }
