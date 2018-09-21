@@ -1,5 +1,7 @@
 package org.leanpoker.player;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,8 +13,6 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class Player {
 
@@ -41,7 +41,7 @@ public class Player {
         if (Hand.isHighPair(leftCard, rightCard)) {
             return minRaise;
         }
-        log("asdasasdd" + gameState.getCommunityCards().size());
+        log("asdasasasddd" + gameState.getCommunityCards().size());
         if (gameState.getCommunityCards().size() == 0) {
             log("pre-flop");
             if (leftCard.getValue() > 12 || rightCard.getValue() > 12) {
@@ -49,7 +49,7 @@ public class Player {
             }
         } else if (gameState.getCommunityCards().size() >= 3) {
             log("flop");
-            Rank rank = new Gson().fromJson(httpGet("http://rainman.leanpoker.org/rank",
+            final Rank rank = new Gson().fromJson(httpGet("http://rainman.leanpoker.org/rank",
                     "cards", new Gson().toJson(hand)), Rank.class);
             log("rank: " + new GsonBuilder().setPrettyPrinting().create().toJson(rank));
             if (rank.getRank() > 0) {
@@ -81,14 +81,14 @@ public class Player {
         System.out.println(message);
     }
 
-    private static String httpGet(String url, String property, String value) {
+    private static String httpGet(final String url, final String property, final String value) {
         try {
-            HttpURLConnection http = (HttpURLConnection) new URL(url + "?cards=" + URLEncoder.encode(value, "UTF-8")).openConnection();
+            final HttpURLConnection http = (HttpURLConnection) new URL(url + "?cards=" + URLEncoder.encode(value, "UTF-8")).openConnection();
             http.setRequestMethod("GET");
-            String response = httpReadData(http);
+            final String response = httpReadData(http);
             System.out.println(http.getResponseMessage());
             return response;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             System.out.println("Http get failed!" + e);
             return "";
         }
