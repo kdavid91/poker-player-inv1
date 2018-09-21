@@ -19,11 +19,11 @@ public class Player {
         Card rightCard = ourPlayer.getHoleCards().get(1);
         log("our cards: left: " + leftCard + ", right: " + rightCard);
 
-
-
-
+        if (Hand.isHighPair(leftCard, rightCard)) {
+            return gameState.getCurrentBuyIn() - ourPlayer.getBet();
+        }
+        
         return 100;
-
     }
 
     public static void showdown(final JsonElement game) {
