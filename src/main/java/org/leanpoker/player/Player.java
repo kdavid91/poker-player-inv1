@@ -48,7 +48,7 @@ public class Player {
             if (Hand.isHighPair(leftCard, rightCard)) {
                 return minRaise * 4;
             }
-            if (Hand.isPair(leftCard, rightCard) {
+            if (Hand.isPair(leftCard, rightCard)) {
                 return call;
             }
             if (leftCard.getValue() > 12 || rightCard.getValue() > 12) {
