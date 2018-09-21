@@ -46,7 +46,7 @@ public class Player {
                 return minRaise * 4;
             }
             if (Hand.isPair(leftCard, rightCard) || leftCard.getValue() > 12 || rightCard.getValue() > 12) {
-                if (gameState.getPot() >= call * 3) {
+                if (gameState.getPot() >= call * 4) {
                     return call;
                 }
             }
@@ -54,7 +54,7 @@ public class Player {
             log("flop");
             Rank rank = getRank(hand);
             if (rank.getRank() == 0 && (leftCard.getValue() > 12 || rightCard.getValue() > 12)) {
-                if (gameState.getPot() >= call * 2) {
+                if (gameState.getPot() >= call * 4) {
                     return call;
                 }
             } else if (rank.getRank() == 1 && (leftCard.getValue() == rank.getValue() || rightCard.getValue() == rank.getValue())) {
