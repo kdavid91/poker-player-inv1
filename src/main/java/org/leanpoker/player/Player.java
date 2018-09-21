@@ -39,13 +39,14 @@ public class Player {
         final List<Card> hand = new ArrayList<>(gameState.getCommunityCards());
         hand.addAll(ourPlayer.getHoleCards());
 
-        if (Hand.isHighPair(leftCard, rightCard)) {
-            return minRaise * 2;
-        }
         log("community cards: " + gameState.getCommunityCards().size());
         if (gameState.getCommunityCards().size() == 0) {
             log("pre-flop");
-            if (leftCard.getValue() > 12 || rightCard.getValue() > 12) {
+            if (Hand.isHighPair(leftCard, rightCard)) {
+                return minRaise * 4;
+            }
+            if (Hand.isPair(leftCard, rightCard) || leftCard.getValue() > 12 || rightCard.getValue() > 12) {
+                // if (gameState.getCurrentBuyIn() >900)
                 return call;
             }
         } else if (gameState.getCommunityCards().size() == 3) {
@@ -59,6 +60,8 @@ public class Player {
                 } else if (rank.getValue() > 12) {
                     return minRaise;
                 }
+            } else if (rank.getRank() >= 3) {
+                return allIn;
             } else if (rank.getRank() > 1) {
                 return minRaise * 2;
             }
