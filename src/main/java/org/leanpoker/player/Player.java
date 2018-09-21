@@ -46,14 +46,17 @@ public class Player {
                 return minRaise * 4;
             }
             if (Hand.isPair(leftCard, rightCard) || leftCard.getValue() > 12 || rightCard.getValue() > 12) {
-                // if (gameState.getCurrentBuyIn() >900)
-                return call;
+                if (gameState.getPot() >= call * 3) {
+                    return call;
+                }
             }
         } else if (gameState.getCommunityCards().size() == 3) {
             log("flop");
             Rank rank = getRank(hand);
             if (rank.getRank() == 0 && (leftCard.getValue() > 12 || rightCard.getValue() > 12)) {
-                return call;
+                if (gameState.getPot() >= call * 2) {
+                    return call;
+                }
             } else if (rank.getRank() == 1 && (leftCard.getValue() == rank.getValue() || rightCard.getValue() == rank.getValue())) {
                 if (rank.getValue() > 8) {
                     return call;
