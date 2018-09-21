@@ -48,7 +48,7 @@ public class Player {
             if (leftCard.getValue() > 12 || rightCard.getValue() > 12) {
                 return call;
             }
-        } else if (gameState.getCommunityCards().size() >= 3) {
+        } else if (gameState.getCommunityCards().size() == 3) {
             log("flop");
             Rank rank = getRank(hand);
             if (rank.getRank() == 0 && (leftCard.getValue() > 12 || rightCard.getValue() > 12)) {
@@ -66,10 +66,28 @@ public class Player {
         } else if (gameState.getCommunityCards().size() == 4) {
             log("turn");
             Rank rank = getRank(hand);
-
+            if (rank.getRank() == 1) {
+                if (rank.getValue() > 8) {
+                    return call;
+                } else if (rank.getValue() > 12) {
+                    return minRaise;
+                }
+            } else if (rank.getRank() > 1) {
+                return minRaise * 2;
+            }
 
         } else if (gameState.getCommunityCards().size() == 5) {
             log("river");
+            Rank rank = getRank(hand);
+            if (rank.getRank() == 1) {
+                if (rank.getValue() > 8) {
+                    return call;
+                } else if (rank.getValue() > 12) {
+                    return minRaise;
+                }
+            } else if (rank.getRank() > 1) {
+                return minRaise * 2;
+            }
         }
 
         if (gameState.getCurrentBuyIn() == 0 || gameState.getBigBlind() == gameState.getCurrentBuyIn()) {
