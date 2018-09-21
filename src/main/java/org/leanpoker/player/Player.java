@@ -1,34 +1,38 @@
 package org.leanpoker.player;
 
+import java.util.List;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-
-import java.util.List;
 
 public class Player {
 
     static final String VERSION = "BESTWINNERS";
 
     public static int betRequest(final JsonElement request) {
-        GameState gameState = new Gson().fromJson(request, GameState.class);
+        final GameState gameState = new Gson().fromJson(request, GameState.class);
         System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(request));
 
-        Players ourPlayer = gameState.getPlayers().stream()
+        final Players ourPlayer = gameState.getPlayers().stream()
                 .filter(player -> player.getName().equals("InV1"))
                 .findFirst()
                 .get();
 
-        Card leftCard = ourPlayer.getHoleCards().get(0);
-        Card rightCard = ourPlayer.getHoleCards().get(1);
+        final Card leftCard = ourPlayer.getHoleCards().get(0);
+        final Card rightCard = ourPlayer.getHoleCards().get(1);
         log("our cards: left: " + leftCard + ", right: " + rightCard);
 
-        int call = gameState.getCurrentBuyIn() - ourPlayer.getBet();
-        int minRaise = call + gameState.getMinimumRaise();
-        int allIn = gameState.getPlayers().size() * 1001;
+        final int call = gameState.getCurrentBuyIn() - ourPlayer.getBet();
+        final int minRaise = call + gameState.getMinimumRaise();
+        final int allIn = gameState.getPlayers().size() * 1001;
 
-        List<Card> hand = gameState.getCommunityCards();
+        final List<Card> hand = gameState.getCommunityCards();
         hand.addAll(ourPlayer.getHoleCards());
+
+        if (gameState.getCommunityCards().isEmpty() && Hand.isHighPair(leftCard, rightCard)) {
+            return minRaise;
+        }
 
         if (Hand.isHighPair(leftCard, rightCard) || leftCard.getValue() > 12 || rightCard.getValue() > 12
                 || Hand.isPair(ourPlayer.getHoleCards(), gameState.getCommunityCards())) {
@@ -48,7 +52,7 @@ public class Player {
         // System.out.println(game);
     }
 
-    private static void log(String message) {
+    private static void log(final String message) {
         System.out.println(message);
     }
 
