@@ -19,10 +19,12 @@ public class Player {
         Card rightCard = ourPlayer.getHoleCards().get(1);
         log("our cards: left: " + leftCard + ", right: " + rightCard);
 
-        if (Hand.isHighPair(leftCard, rightCard)) {
-            return gameState.getCurrentBuyIn() - ourPlayer.getBet();
+        int amountToCall = gameState.getCurrentBuyIn() - ourPlayer.getBet();
+
+        if (Hand.isHighPair(leftCard, rightCard)                ) {
+            return amountToCall;
         }
-        
+
         return 100;
     }
 
