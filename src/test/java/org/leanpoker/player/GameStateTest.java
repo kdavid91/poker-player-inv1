@@ -43,7 +43,7 @@ public class GameStateTest {
         String rank = new Gson().toJson(cards);
         System.out.println(rank);
 
-        System.out.println(httpGet("http://rainman.leanpoker.org/rank", "cards", rank));
+        // System.out.println(httpGet("http://rainman.leanpoker.org/rank", "cards", rank));
 
     }
 
@@ -51,30 +51,6 @@ public class GameStateTest {
     public void rank2() {
         Rank ranks = new Gson().fromJson(rank, Rank.class);
         System.out.println(ranks.getRank());
-    }
-
-    private static String httpGet(String url, String property, String value) {
-        try {
-            HttpURLConnection http = (HttpURLConnection) new URL(url + "?cards="+URLEncoder.encode(value, "UTF-8")).openConnection();
-            http.setRequestMethod("GET");
-            String response =  httpReadData(http);
-            System.out.println(http.getResponseMessage());
-            return response;
-        } catch (IOException e) {
-            System.out.println("Http get failed!" + e);
-            return "";
-        }
-    }
-
-    private static String httpReadData(final HttpURLConnection http) throws IOException {
-        final StringBuilder response = new StringBuilder();
-        try (BufferedReader input = new BufferedReader(new InputStreamReader(http.getInputStream(), UTF_8))) {
-            String line;
-            while ((line = input.readLine()) != null) {
-                response.append(line);
-            }
-        }
-        return response.toString();
     }
 
 }
