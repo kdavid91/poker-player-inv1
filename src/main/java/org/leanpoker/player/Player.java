@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 
 public class Player {
 
-    static final String VERSION = "WINNERS";
+    static final String VERSION = "BESTWINNERS";
 
     public static int betRequest(final JsonElement request) {
         System.out.println(request);
