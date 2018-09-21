@@ -59,4 +59,9 @@ public class Card {
     public String toString() {
         return "suit: " + suit + ", rank: " + rank;
     }
+
+    public static void main(String[] args) {
+        System.out.println(CardValue.CA.getValue());
+    }
+
 }
