@@ -21,99 +21,103 @@ public class Player {
     static final String VERSION = "BESTWINNERS";
 
     public static int betRequest(final JsonElement request) {
+        try {
+            final GameState gameState = new Gson().fromJson(request, GameState.class);
+            System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(request));
 
-        final GameState gameState = new Gson().fromJson(request, GameState.class);
-        System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(request));
+            final Players ourPlayer = gameState.getPlayers().stream()
+                    .filter(player -> player.getName().equals("InV1"))
+                    .findFirst()
+                    .get();
 
-        final Players ourPlayer = gameState.getPlayers().stream()
-                .filter(player -> player.getName().equals("InV1"))
-                .findFirst()
-                .get();
+            final Card leftCard = ourPlayer.getHoleCards().get(0);
+            final Card rightCard = ourPlayer.getHoleCards().get(1);
+            log("our cards: left: " + leftCard + ", right: " + rightCard);
 
-        final Card leftCard = ourPlayer.getHoleCards().get(0);
-        final Card rightCard = ourPlayer.getHoleCards().get(1);
-        log("our cards: left: " + leftCard + ", right: " + rightCard);
+            final int call = gameState.getCurrentBuyIn() - ourPlayer.getBet();
+            final int minRaise = call + gameState.getMinimumRaise();
+            final int allIn = gameState.getPlayers().size() * 1001;
 
-        final int call = gameState.getCurrentBuyIn() - ourPlayer.getBet();
-        final int minRaise = call + gameState.getMinimumRaise();
-        final int allIn = gameState.getPlayers().size() * 1001;
+            final List<Card> hand = new ArrayList<>(gameState.getCommunityCards());
+            hand.addAll(ourPlayer.getHoleCards());
 
-        final List<Card> hand = new ArrayList<>(gameState.getCommunityCards());
-        hand.addAll(ourPlayer.getHoleCards());
-
-        log("community cards: " + gameState.getCommunityCards().size());
-        if (gameState.getCommunityCards().size() == 0) {
-            log("pre-flop");
-            if (leftCard.getValue() > 11 && rightCard.getValue() > 11) {
-                return allIn;
-            }
-            if (Hand.isHighPair(leftCard, rightCard)) {
-                return minRaise * 4;
-            }
-            if (Hand.isPair(leftCard, rightCard)) {
-                return call;
-            }
-            if (leftCard.getValue() > 12 || rightCard.getValue() > 12) {
-                if (call < gameState.getBigBlind() * 5 + 1) {
+            log("community cards: " + gameState.getCommunityCards().size());
+            if (gameState.getCommunityCards().size() == 0) {
+                log("pre-flop");
+                if (leftCard.getValue() > 11 && rightCard.getValue() > 11) {
+                    return allIn;
+                }
+                if (Hand.isHighPair(leftCard, rightCard)) {
+                    return minRaise * 4;
+                }
+                if (Hand.isPair(leftCard, rightCard)) {
                     return call;
                 }
-            }
-        } else if (gameState.getCommunityCards().size() == 3) {
-            log("flop");
-            Rank rank = getRank(hand);
-
-            if (fourInSameSuite(rank.getCards())) {
-                return allIn;
-            } else if (rank.getRank() == 0 && (leftCard.getValue() > 12 || rightCard.getValue() > 12)) {
-                if (call < gameState.getBigBlind() * 2 + 1) {
-                    return call;
+                if (leftCard.getValue() > 12 || rightCard.getValue() > 12) {
+                    if (call < gameState.getBigBlind() * 5 + 1) {
+                        return call;
+                    }
                 }
-            } else if (rank.getRank() == 1 && (leftCard.getValue() == rank.getValue() || rightCard.getValue() == rank.getValue())) {
-                if (rank.getValue() > 8) {
-                    return call;
-                } else if (rank.getValue() > 12) {
-                    return minRaise;
+            } else if (gameState.getCommunityCards().size() == 3) {
+                log("flop");
+                Rank rank = getRank(hand);
+
+                if (fourInSameSuite(rank.getCards())) {
+                    return allIn;
+                } else if (rank.getRank() == 0 && (leftCard.getValue() > 12 || rightCard.getValue() > 12)) {
+                    if (call < gameState.getBigBlind() * 2 + 1) {
+                        return call;
+                    }
+                } else if (rank.getRank() == 1 && (leftCard.getValue() == rank.getValue() || rightCard.getValue() == rank.getValue())) {
+                    if (rank.getValue() > 8) {
+                        return call;
+                    } else if (rank.getValue() > 12) {
+                        return minRaise;
+                    }
+                } else if (rank.getRank() >= 3) {
+                    return allIn;
+                } else if (rank.getRank() > 1) {
+                    return minRaise * 2;
                 }
-            } else if (rank.getRank() >= 3) {
-                return allIn;
-            } else if (rank.getRank() > 1) {
-                return minRaise * 2;
+
+            } else if (gameState.getCommunityCards().size() == 4) {
+                log("turn");
+                Rank rank = getRank(hand);
+                if (rank.getRank() == 1 && (leftCard.getValue() == rank.getValue() || rightCard.getValue() == rank.getValue())) {
+                    if (rank.getValue() > 8) {
+                        return call;
+                    } else if (rank.getValue() > 12) {
+                        return minRaise;
+                    }
+                } else if (rank.getRank() >= 3) {
+                    return allIn;
+                } else if (rank.getRank() > 1) {
+                    return minRaise * 2;
+                }
+
+            } else if (gameState.getCommunityCards().size() == 5) {
+                log("river");
+                Rank rank = getRank(hand);
+                if (rank.getRank() == 1 && (leftCard.getValue() == rank.getValue() || rightCard.getValue() == rank.getValue())) {
+                    if (rank.getValue() > 8) {
+                        return call;
+                    } else if (rank.getValue() > 12) {
+                        return minRaise;
+                    }
+                } else if (rank.getRank() >= 3) {
+                    return allIn;
+                } else if (rank.getRank() > 1) {
+                    return minRaise * 2;
+                }
             }
 
-        } else if (gameState.getCommunityCards().size() == 4) {
-            log("turn");
-            Rank rank = getRank(hand);
-            if (rank.getRank() == 1 && (leftCard.getValue() == rank.getValue() || rightCard.getValue() == rank.getValue())) {
-                if (rank.getValue() > 8) {
-                    return call;
-                } else if (rank.getValue() > 12) {
-                    return minRaise;
-                }
-            } else if (rank.getRank() >= 3) {
-                return allIn;
-            } else if (rank.getRank() > 1) {
-                return minRaise * 2;
+            if (gameState.getCurrentBuyIn() == 0 || gameState.getBigBlind() == gameState.getCurrentBuyIn()) {
+                log("no bet");
+                return minRaise;
             }
 
-        } else if (gameState.getCommunityCards().size() == 5) {
-            log("river");
-            Rank rank = getRank(hand);
-            if (rank.getRank() == 1 && (leftCard.getValue() == rank.getValue() || rightCard.getValue() == rank.getValue())) {
-                if (rank.getValue() > 8) {
-                    return call;
-                } else if (rank.getValue() > 12) {
-                    return minRaise;
-                }
-            } else if (rank.getRank() >= 3) {
-                return allIn;
-            } else if (rank.getRank() > 1) {
-                return minRaise * 2;
-            }
-        }
-
-        if (gameState.getCurrentBuyIn() == 0 || gameState.getBigBlind() == gameState.getCurrentBuyIn()) {
-            log("no bet");
-            return minRaise;
+        } catch (Exception e) {
+            log(e.getMessage());
         }
         return 0;
     }
