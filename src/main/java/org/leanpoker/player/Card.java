@@ -37,16 +37,18 @@ public class Card {
         return rank;
     }
 
-    public void setRank(String rank) {
+    public Card setRank(String rank) {
         this.rank = rank;
+        return this;
     }
 
     public String getSuit() {
         return suit;
     }
 
-    public void setSuit(String suit) {
+    public Card setSuit(String suit) {
         this.suit = suit;
+        return this;
     }
 
     public int getValue() {
