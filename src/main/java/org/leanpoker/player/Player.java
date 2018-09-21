@@ -1,5 +1,6 @@
 package org.leanpoker.player;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 public class Player {
@@ -7,8 +8,13 @@ public class Player {
     static final String VERSION = "BESTWINNERS";
 
     public static int betRequest(final JsonElement request) {
-        System.out.println(request);
+        GameState gameState = new Gson().fromJson(request, GameState.class);
 
+        Players ourPlayer = gameState.getPlayers().stream()
+                .filter(player -> player.getName().equals("InV1"))
+                .findFirst()
+                .get();
+        
         return 100;
 
     }
