@@ -16,6 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GameStateTest {
 
@@ -38,12 +39,10 @@ public class GameStateTest {
         cards.add(new Card().setRank("7").setSuit("diamonds"));
         cards.add(new Card().setRank("7").setSuit("spades"));
         cards.add(new Card().setRank("8").setSuit("diamonds"));
-        cards.add(new Card().setRank("9").setSuit("diamonds"));
 
-        String rank = new Gson().toJson(cards);
-        System.out.println(rank);
+        System.out.println(cards.stream().collect(Collectors.groupingBy(Card::getSuit, Collectors.counting())).values().stream().anyMatch(count -> count >=4));
 
-        // System.out.println(httpGet("http://rainman.leanpoker.org/rank", "cards", rank));
+        // httpGet("http://rainman.leanpoker.org/rank", "cards", rank));
 
     }
 

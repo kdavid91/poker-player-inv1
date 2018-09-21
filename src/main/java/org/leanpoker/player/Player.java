@@ -10,6 +10,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,6 +21,7 @@ public class Player {
     static final String VERSION = "BESTWINNERS";
 
     public static int betRequest(final JsonElement request) {
+
         final GameState gameState = new Gson().fromJson(request, GameState.class);
         System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(request));
 
@@ -59,7 +61,10 @@ public class Player {
         } else if (gameState.getCommunityCards().size() == 3) {
             log("flop");
             Rank rank = getRank(hand);
-            if (rank.getRank() == 0 && (leftCard.getValue() > 12 || rightCard.getValue() > 12)) {
+
+            if (fourInSameSuite(rank.getCards())) {
+                return allIn;
+            } else if (rank.getRank() == 0 && (leftCard.getValue() > 12 || rightCard.getValue() > 12)) {
                 if (call < gameState.getBigBlind() * 2 + 1) {
                     return call;
                 }
@@ -128,10 +133,17 @@ public class Player {
         return rank;
     }
 
+    private static boolean fourInSameSuite(List<Card> cards) {
+        return cards.stream().collect(Collectors.groupingBy(Card::getSuit,
+                Collectors.counting())).values().stream().anyMatch(count -> count >= 4);
+    }
+
     private static String httpGet(final String url, final String property, final String value) {
         try {
             final HttpURLConnection http = (HttpURLConnection) new URL(url + "?cards=" + URLEncoder.encode(value, "UTF-8")).openConnection();
             http.setRequestMethod("GET");
+            http.setConnectTimeout(300_000);
+            http.setReadTimeout(300_000);
             final String response = httpReadData(http);
             System.out.println(http.getResponseMessage());
             return response;
