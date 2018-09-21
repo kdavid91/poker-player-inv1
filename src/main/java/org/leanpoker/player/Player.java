@@ -30,21 +30,27 @@ public class Player {
         final List<Card> hand = gameState.getCommunityCards();
         hand.addAll(ourPlayer.getHoleCards());
 
-        if (gameState.getCommunityCards().isEmpty() && Hand.isHighPair(leftCard, rightCard)) {
+        if (Hand.isHighPair(leftCard, rightCard)) {
             return minRaise;
         }
 
-        if (Hand.isHighPair(leftCard, rightCard) || leftCard.getValue() > 12 || rightCard.getValue() > 12
-                || Hand.isPair(ourPlayer.getHoleCards(), gameState.getCommunityCards())) {
-            log("call with: " + call);
-            return call;
+        if (gameState.getCommunityCards().size() == 0) {
+            log("pre-flop");
+            if (leftCard.getValue() > 12 || rightCard.getValue() > 12) {
+                return call;
+            }
+        } else if (gameState.getCommunityCards().size() == 3) {
+            log("flop");
+        } else if (gameState.getCommunityCards().size() == 4) {
+            log("turn");
+        } else if (gameState.getCommunityCards().size() == 5) {
+            log("river");
         }
 
         if (gameState.getCurrentBuyIn() == 0 || gameState.getBigBlind() == gameState.getCurrentBuyIn()) {
             log("no bet");
             return minRaise;
         }
-
         return 0;
     }
 
