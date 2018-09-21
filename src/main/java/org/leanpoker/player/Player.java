@@ -50,10 +50,10 @@ public class Player {
             }
         } else if (gameState.getCommunityCards().size() >= 3) {
             log("flop");
-            final Rank rank = new Gson().fromJson(httpGet("http://rainman.leanpoker.org/rank",
-                    "cards", new Gson().toJson(hand)), Rank.class);
-            log("rank: " + new GsonBuilder().setPrettyPrinting().create().toJson(rank));
-            if (rank.getRank() == 1) {
+            Rank rank = getRank(hand);
+            if (rank.getRank() == 0 && (leftCard.getValue() > 12 || rightCard.getValue() > 12)) {
+                return call;
+            } else if (rank.getRank() == 1) {
                 if (rank.getValue() > 8) {
                     return call;
                 } else if (rank.getValue() > 12) {
@@ -65,6 +65,9 @@ public class Player {
 
         } else if (gameState.getCommunityCards().size() == 4) {
             log("turn");
+            Rank rank = getRank(hand);
+
+
         } else if (gameState.getCommunityCards().size() == 5) {
             log("river");
         }
@@ -82,6 +85,13 @@ public class Player {
 
     private static void log(final String message) {
         System.out.println(message);
+    }
+
+    private static Rank getRank(List<Card> hand) {
+        final Rank rank = new Gson().fromJson(httpGet("http://rainman.leanpoker.org/rank",
+                "cards", new Gson().toJson(hand)), Rank.class);
+        log("rank: " + new GsonBuilder().setPrettyPrinting().create().toJson(rank));
+        return rank;
     }
 
     private static String httpGet(final String url, final String property, final String value) {
