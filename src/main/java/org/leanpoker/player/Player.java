@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 
 public class Player {
 
-    static final String VERSION = "Do not modify this String!";
+    static final String VERSION = "Do not modify this String!!";
 
     public static int betRequest(final JsonElement request) {
         System.out.println(request);
