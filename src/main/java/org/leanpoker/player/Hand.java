@@ -15,7 +15,7 @@ public class Hand {
     }
 
     private static boolean isHighCard(final Card card) {
-        return card.getCardValue() >= 10;
+        return card.getValue() >= 10;
     }
 
 }
