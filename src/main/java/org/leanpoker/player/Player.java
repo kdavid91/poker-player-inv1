@@ -17,8 +17,8 @@ public class Player {
 
         Card leftCard = ourPlayer.getHoleCards().get(0);
         Card rightCard = ourPlayer.getHoleCards().get(1);
-
         log("our cards: left: " + leftCard + ", right: " + rightCard);
+
 
 
 
