@@ -14,7 +14,7 @@ public class GameStateTest {
 
         GameState state = new Gson().fromJson(gameState, GameState.class);
 
-        System.out.println(state.getPlayers().get(0).getBet());
+        System.out.println(state.getCommunityCards().get(0));
     }
 
 }

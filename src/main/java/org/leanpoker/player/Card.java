@@ -3,7 +3,7 @@ package org.leanpoker.player;
 public class Card {
 
     private String rank;
-    private String suite;
+    private String suit;
 
     public String getRank() {
         return rank;
@@ -13,12 +13,16 @@ public class Card {
         this.rank = rank;
     }
 
-    public String getSuite() {
-        return suite;
+    public String getSuit() {
+        return suit;
     }
 
-    public void setSuite(String suite) {
-        this.suite = suite;
+    public void setSuit(String suit) {
+        this.suit = suit;
     }
 
+    @Override
+    public String toString() {
+        return "suit: " + suit + ", rank: " + rank;
+    }
 }
