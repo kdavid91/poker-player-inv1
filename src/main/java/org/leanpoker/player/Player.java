@@ -30,7 +30,8 @@ public class Player {
         List<Card> hand = gameState.getCommunityCards();
         hand.addAll(ourPlayer.getHoleCards());
 
-        if (Hand.isHighPair(leftCard, rightCard) || leftCard.getValue() > 12 || rightCard.getValue() > 12) {
+        if (Hand.isHighPair(leftCard, rightCard) || leftCard.getValue() > 12 || rightCard.getValue() > 12
+                || Hand.isPair(ourPlayer.getHoleCards(), gameState.getCommunityCards())) {
             log("call with: " + call);
             return call;
         }
