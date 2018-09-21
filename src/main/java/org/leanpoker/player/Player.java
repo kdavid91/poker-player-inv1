@@ -33,7 +33,7 @@ public class Player {
         if (Hand.isHighPair(leftCard, rightCard)) {
             return minRaise;
         }
-        log("asdasd" + gameState.getCommunityCards().size());
+        log("asdasasdd" + gameState.getCommunityCards().size());
         if (gameState.getCommunityCards().size() == 0) {
             log("pre-flop");
             if (leftCard.getValue() > 12 || rightCard.getValue() > 12) {
