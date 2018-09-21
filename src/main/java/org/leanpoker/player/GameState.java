@@ -22,6 +22,9 @@ public class GameState {
     @SerializedName("small_blind")
     private int smallBlind;
 
+    @SerializedName("big_blind")
+    private int bigBlind;
+
     private int orbits;
 
     private int dealer;
@@ -33,6 +36,12 @@ public class GameState {
     private int currentBuyIn;
 
     private int pot;
+
+    @SerializedName("minimum_raise")
+    private int minimumRaise;
+
+    @SerializedName("in_action")
+    private int inAction;
 
     public List<Players> getPlayers() {
         return players;
@@ -120,6 +129,30 @@ public class GameState {
 
     public void setPot(int pot) {
         this.pot = pot;
+    }
+
+    public int getMinimumRaise() {
+        return minimumRaise;
+    }
+
+    public void setMinimumRaise(int minimumRaise) {
+        this.minimumRaise = minimumRaise;
+    }
+
+    public int getInAction() {
+        return inAction;
+    }
+
+    public void setInAction(int inAction) {
+        this.inAction = inAction;
+    }
+
+    public int getBigBlind() {
+        return bigBlind;
+    }
+
+    public void setBigBlind(int bigBlind) {
+        this.bigBlind = bigBlind;
     }
 
 }

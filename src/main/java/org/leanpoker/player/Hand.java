@@ -1,5 +1,7 @@
 package org.leanpoker.player;
 
+import java.util.List;
+
 public class Hand {
 
     public static boolean isPair(final Card left, final Card right) {
@@ -13,6 +15,14 @@ public class Hand {
     public static boolean isHighPair(final Card left, final Card right) {
         return isPair(left, right) && isHighCard(left) && isHighCard(right);
     }
+
+    public static boolean isHighPair(List<Card> cards) {
+
+
+
+        return true;
+    }
+
 
     private static boolean isHighCard(final Card card) {
         return card.getValue() >= 10;

@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 
+import java.util.List;
+
 public class Player {
 
     static final String VERSION = "BESTWINNERS";
@@ -21,11 +23,21 @@ public class Player {
         Card rightCard = ourPlayer.getHoleCards().get(1);
         log("our cards: left: " + leftCard + ", right: " + rightCard);
 
-        int amountToCall = gameState.getCurrentBuyIn() - ourPlayer.getBet();
+        int call = gameState.getCurrentBuyIn() - ourPlayer.getBet();
+        int minRaise = call + gameState.getMinimumRaise();
+        int allIn = gameState.getPlayers().size() * 1001;
+
+        List<Card> hand = gameState.getCommunityCards();
+        hand.addAll(ourPlayer.getHoleCards());
 
         if (Hand.isHighPair(leftCard, rightCard) || leftCard.getValue() > 12 || rightCard.getValue() > 12) {
-            log("call with: " + amountToCall);
-            return amountToCall;
+            log("call with: " + call);
+            return call;
+        }
+
+        if (gameState.getCurrentBuyIn() == 0 || gameState.getBigBlind() == gameState.getCurrentBuyIn()) {
+            log("no bet");
+            return minRaise;
         }
 
         return 0;
