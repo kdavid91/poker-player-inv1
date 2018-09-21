@@ -48,8 +48,11 @@ public class Player {
             if (Hand.isHighPair(leftCard, rightCard)) {
                 return minRaise * 4;
             }
-            if (Hand.isPair(leftCard, rightCard) || leftCard.getValue() > 12 || rightCard.getValue() > 12) {
-                if (gameState.getPot() >= call * 4) {
+            if (Hand.isPair(leftCard, rightCard) {
+                return call;
+            }
+            if (leftCard.getValue() > 12 || rightCard.getValue() > 12) {
+                if (call < gameState.getBigBlind() * 5 + 1) {
                     return call;
                 }
             }
