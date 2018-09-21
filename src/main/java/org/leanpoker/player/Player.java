@@ -42,6 +42,9 @@ public class Player {
         log("community cards: " + gameState.getCommunityCards().size());
         if (gameState.getCommunityCards().size() == 0) {
             log("pre-flop");
+            if (leftCard.getValue() > 11 && rightCard.getValue() > 11) {
+                return allIn;
+            }
             if (Hand.isHighPair(leftCard, rightCard)) {
                 return minRaise * 4;
             }
