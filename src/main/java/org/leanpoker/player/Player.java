@@ -60,7 +60,7 @@ public class Player {
             log("flop");
             Rank rank = getRank(hand);
             if (rank.getRank() == 0 && (leftCard.getValue() > 12 || rightCard.getValue() > 12)) {
-                if (gameState.getPot() >= call * 4) {
+                if (call < gameState.getBigBlind() * 2 + 1) {
                     return call;
                 }
             } else if (rank.getRank() == 1 && (leftCard.getValue() == rank.getValue() || rightCard.getValue() == rank.getValue())) {
