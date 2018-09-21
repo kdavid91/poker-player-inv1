@@ -49,7 +49,7 @@ public class Card {
         this.suit = suit;
     }
 
-    public int getCardValue() {
+    public int getValue() {
         return CardValue.valueOf("C" + getRank()).getValue();
     }
 
