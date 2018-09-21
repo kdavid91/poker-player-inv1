@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -35,13 +36,13 @@ public class Player {
         final int minRaise = call + gameState.getMinimumRaise();
         final int allIn = gameState.getPlayers().size() * 1001;
 
-        final List<Card> hand = gameState.getCommunityCards();
+        final List<Card> hand = new ArrayList<>(gameState.getCommunityCards());
         hand.addAll(ourPlayer.getHoleCards());
 
         if (Hand.isHighPair(leftCard, rightCard)) {
-            return minRaise;
+            return minRaise * 2;
         }
-        log("asdasasasddd" + gameState.getCommunityCards().size());
+        log("community cards: " + gameState.getCommunityCards().size());
         if (gameState.getCommunityCards().size() == 0) {
             log("pre-flop");
             if (leftCard.getValue() > 12 || rightCard.getValue() > 12) {
@@ -52,12 +53,14 @@ public class Player {
             final Rank rank = new Gson().fromJson(httpGet("http://rainman.leanpoker.org/rank",
                     "cards", new Gson().toJson(hand)), Rank.class);
             log("rank: " + new GsonBuilder().setPrettyPrinting().create().toJson(rank));
-            if (rank.getRank() > 0) {
+            if (rank.getRank() == 1) {
                 if (rank.getValue() > 8) {
                     return call;
                 } else if (rank.getValue() > 12) {
                     return minRaise;
                 }
+            } else if (rank.getRank() > 1) {
+                return minRaise * 2;
             }
 
         } else if (gameState.getCommunityCards().size() == 4) {
