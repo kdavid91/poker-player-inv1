@@ -84,6 +84,8 @@ public class Player {
                 } else if (rank.getValue() > 12) {
                     return minRaise;
                 }
+            } else if (rank.getRank() >= 3) {
+                return allIn;
             } else if (rank.getRank() > 1) {
                 return minRaise * 2;
             }
@@ -97,6 +99,8 @@ public class Player {
                 } else if (rank.getValue() > 12) {
                     return minRaise;
                 }
+            } else if (rank.getRank() >= 3) {
+                return allIn;
             } else if (rank.getRank() > 1) {
                 return minRaise * 2;
             }
